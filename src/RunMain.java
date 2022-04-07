@@ -34,6 +34,11 @@ public class RunMain {
             String num_columnsB = prop.getProperty("P");
 
             //convert string values to int
+            /*
+            m = number of rows in matrix a
+            n = number of columns in matrix a and rows in matrix b
+            p = number of columns in matrix b
+             */
             int m = Integer.parseInt(num_rows);
             int n = Integer.parseInt(num_columns);
             int p = Integer.parseInt(num_columnsB);
@@ -41,12 +46,13 @@ public class RunMain {
 
             int[][] matrix_A = generateMatrix(m, n); //matrix a
             int[][] matrix_B = generateMatrix(n, p); //matrix b
-            //int[][] matrix_result = multiplyMatrix(matrix_A, matrix_B); //matrix multiplication result
+            int[][] matrix_result = multiplyMatrix(matrix_A, matrix_B, m, n, p); //matrix multiplication result
 
 
             printMatrix(matrix_A);
             System.out.println();
             printMatrix(matrix_B);
+            printMatrix(matrix_result);
 
             // Not sure what this matrixTraversal is for it looks like it does the same thing as printMatrix
             //matrixTraversal(matrix_A);
@@ -76,21 +82,21 @@ public class RunMain {
     }
 
     //multiply the matrix
-//    public static int[][] multiplyMatrix(int[][] matrix_one, int[][] matrix_two) {
-//        int [][] result = new int [matrix_one.length][matrix_two[0].length];
-//
-//        for (int i = 0; i < matrix_one.length; i++) {
-//            for (int j = 0; j < matrix_two[0].length; j++) {
-//                for(int k = 0; k < matrix_one[0].length; k++) {
-//                    result = result + matrix_one[i][k] * matrix_two[k][j];
-//                }
-//
-//            }
-//
-//        }
-//        return result;
-//    }
+    public static int[][] multiplyMatrix(int[][] matrix_one, int[][] matrix_two, int m, int n, int p) {
+        int [][] result = new int [m][p];
+
+        for(int i = 0; i< m; i++){
+            for(int j = 0; j< p; j++){
+                for(int k = 0; k< n; k++){
+                    result[i][j] += matrix_one[i][k] * matrix_two[k][j];
+                }
+            }
+        }
+        return result;
+    }
+
     public static void printMatrix(int[][] matrix) {
+        System.out.println();
         for (int i = 0; i < matrix.length; i++) {
 
             for (int j = 0; j < matrix[i].length; j++) {
