@@ -47,7 +47,9 @@ public class RunMain {
             printMatrix(matrix_A);
             System.out.println();
             printMatrix(matrix_B);
-            matrixTraversal(matrix_A);
+
+            // Not sure what this matrixTraversal is for it looks like it does the same thing as printMatrix
+            //matrixTraversal(matrix_A);
 
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
@@ -57,9 +59,7 @@ public class RunMain {
 
     }
 
-
     //print the matrix
-
 
     //generate the matrix
     public static int[][] generateMatrix(int num_row, int num_column) {
@@ -68,7 +68,7 @@ public class RunMain {
         Random r = new Random();
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
-                matrix[i][j] = r.nextInt(0, 10);
+                matrix[i][j] = r.nextInt(10);
             }
 
         }

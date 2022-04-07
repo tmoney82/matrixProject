@@ -3,7 +3,7 @@ import java.util.*;
 public class Driver {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-        Random r=new Random();
+        Random r = new Random();
         /*
         m = number of rows in the first matrix
         n = number of columns in the first matrix and number of rows in the second matrix
