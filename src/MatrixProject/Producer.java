@@ -7,23 +7,25 @@ package MatrixProject;
 
 /**
  *
- * @author dapen
+ * @author dapeng
  */
 public class Producer implements Runnable{
-    
+
     private BoundedBuffer buff;
     private int maxSleepTime;
     private int[][] matrixA;
     private int[][] matrixB;
     private int splitSize;
-    
-    
-	
+
+
+
     public Producer(int[][] matrixA, int[][] matrixB, BoundedBuffer buff, int maxSleepTime) {
-	this.buff = buff;
+        this.matrixA = matrixA;
+        this.matrixB = matrixB;
+        this.buff = buff;
         this.maxSleepTime = maxSleepTime;
     }
-	
+
     @Override
     public void run() {
         WorkItem workItem = new WorkItem();
@@ -42,8 +44,8 @@ public class Producer implements Runnable{
                     workItem.subA[ar] = matrixA[workItem.lowA + ar];
                 }
             }
-                    
-            
+
+
             for(int j = 0; j < matrixB[0].length; j = j + splitSize){
                 workItem.lowB = j;
                 if (j + splitSize - 1 <= matrixB[0].length){    //enough columns for splitSize
@@ -52,7 +54,7 @@ public class Producer implements Runnable{
                         for (int bc = 0; bc < splitSize; bc++){
                             workItem.subB[br][bc] = matrixB[br][workItem.lowB + bc];
                             buff.set(workItem);
-                        }                        
+                        }
                     }
                 }
                 else {      //no enough columns for splitSize
@@ -61,10 +63,10 @@ public class Producer implements Runnable{
                         for (int bc = 0; bc < (matrixB[0].length % splitSize); bc++){
                             workItem.subB[br][bc] = matrixB[br][workItem.lowB + bc];
                             buff.set(workItem);
-                        }                        
+                        }
                     }
                 }
-                
+
             }
         }
         /*

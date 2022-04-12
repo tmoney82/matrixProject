@@ -1,3 +1,5 @@
+package MatrixProject;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -6,6 +8,12 @@ import java.util.Random;
 import java.util.Scanner;
 public class RunMain {
 
+    /*
+    This is going to be the class that does all the setup from the config file. So we will need to bring in the
+    file to get the default values. Then in the ProducerConsumer class we will need to prompt the user to see if they
+    want to use the default values. If they don't want the default values ask if they have a file, if not then
+    ask for each of the values from the config file to be put in manually.
+     */
     public static void main(String[] args) throws IOException {
 
 
