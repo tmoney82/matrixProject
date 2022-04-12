@@ -1,7 +1,39 @@
-import java.util.*;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package MatrixProject;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+import java.util.Random;
+import java.util.Scanner;
+import jdk.nashorn.internal.runtime.regexp.joni.Config;
+
+/**
+ *
+ * @author dapen
+ */
 public class Driver {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        
+        Properties prop = new Properties();
+        
+        String propFileName = "C:\\Users\\dapen\\Documents\\CS405\\Project\\Project2\\CS405Project2\\src\\main\\java\\hdp\\edu\\wsu\\cs405project2\\config.config";
+        
+        FileInputStream inputStream = new FileInputStream(propFileName);
+
+        //InputStream inputStream = Config.class.getClassLoader().getResourceAsStream(propFileName);
+        if (inputStream != null) {
+            prop.load(inputStream);
+        }
+
+        
+        
+        
         Scanner in = new Scanner(System.in);
         Random r = new Random();
         /*
@@ -73,3 +105,4 @@ public class Driver {
         System.out.println("]");
     }
 } //end Driver class
+

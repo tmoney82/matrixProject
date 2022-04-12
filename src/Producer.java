@@ -19,27 +19,39 @@ public class Producer implements Runnable{
     
     
 	
-    public Producer(int[][] matrixA, int[][] matrixB, BoundedBuffer buff, int maxSleepTime) {
+    public Producer(int[][] matrixA, int[][] matrixB, int splitSize, BoundedBuffer buff, int maxSleepTime) {
 	this.buff = buff;
         this.maxSleepTime = maxSleepTime;
+        this.matrixA = matrixA;
+        this.matrixB = matrixB;
+        this.splitSize = splitSize;
     }
 	
     @Override
     public void run() {
         WorkItem workItem = new WorkItem();
+        workItem.subA = new int[splitSize][matrixA[0].length]; 
+        workItem.subB = new int[matrixB.length][splitSize];
+        workItem.subA[0][0] = 3;
         workItem.done = false;
         for(int i = 0; i < matrixA.length; i = i + splitSize){
             workItem.lowA = i;
             if (i + splitSize - 1 <= matrixA.length){   //enough rows for splitSize
                 workItem.highA = i + splitSize - 1;
                 for(int ar = 0; ar < splitSize; ar++ ){
-                    workItem.subA[ar] = matrixA[workItem.lowA + ar];
+                    for(int ac = 0; ac < matrixA[0].length; ac++){
+                        workItem.subA[ar][ac] = matrixA[workItem.lowA + ar][ac];
+                    }
+                    //workItem.subA[ar] = matrixA[workItem.lowA + ar];
                 }
             }
             else {      //no enough rows for splitSize
                 workItem.highA = matrixA.length - 1;
                 for(int ar = 0; ar < (matrixA.length % splitSize); ar++ ){
-                    workItem.subA[ar] = matrixA[workItem.lowA + ar];
+                    for(int ac = 0; ac < matrixA[0].length; ac++){
+                        workItem.subA[ar][ac] = matrixA[workItem.lowA + ar][ac];
+                    }
+                    //workItem.subA[ar] = matrixA[workItem.lowA + ar];
                 }
             }
                     
@@ -51,7 +63,6 @@ public class Producer implements Runnable{
                     for(int br = 0; br < matrixB.length; br++ ){    //sbuB <= matrixB
                         for (int bc = 0; bc < splitSize; bc++){
                             workItem.subB[br][bc] = matrixB[br][workItem.lowB + bc];
-                            buff.set(workItem);
                         }                        
                     }
                 }
@@ -59,23 +70,17 @@ public class Producer implements Runnable{
                     workItem.highB = matrixB[0].length - 1;
                     for(int br = 0; br < matrixB.length; br++ ){    //sbuB <= matrixB
                         for (int bc = 0; bc < (matrixB[0].length % splitSize); bc++){
-                            workItem.subB[br][bc] = matrixB[br][workItem.lowB + bc];
-                            buff.set(workItem);
+                            workItem.subB[br][bc] = matrixB[br][workItem.lowB + bc]; 
                         }                        
                     }
                 }
-                
+                buff.set(workItem);
+                System.out.println("Put A[" + workItem.lowA + "][" + workItem.highA + "] B[" + workItem.lowB + "][" + workItem.highB + "] pair into buffer");
             }
         }
-        /*
-	for(int i = 0; i < 10; i++) {
-            int num = (int)(Math.random()*(10-100)+100);
-            buff.set(num);
-            System.out.println("Producer: put " + num + " to the buffer.");
-            try {
-		Thread.sleep((int)(Math.random() * (1 + 1 - 20) + 20));
-            } catch(InterruptedException e){}
-        }
-        */
+
+        try {
+            Thread.sleep((int)(Math.random() * (1 + 1 - maxSleepTime) + maxSleepTime));
+        } catch(InterruptedException e){}
     }
 }

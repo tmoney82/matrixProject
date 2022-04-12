@@ -1,3 +1,5 @@
+package MatrixProject;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,7 +27,7 @@ public class RunMain {
 
         try {
 
-            FileInputStream input_file = new FileInputStream("config"); //input the file
+            FileInputStream input_file = new FileInputStream("C:\\Users\\dapen\\Documents\\CS405\\Project\\Project2\\CS405Project2\\src\\main\\java\\hdp\\edu\\wsu\\cs405project2\\config.config"); //input the file
             prop.load(input_file);
 
             //get the values of rows and columns

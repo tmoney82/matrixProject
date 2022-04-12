@@ -15,4 +15,12 @@ public class WorkItem {
     int[][] subC;
     int lowA, lowB, highA, highB;
     boolean done;
+
+    public WorkItem() {
+        
+    }
+    
+    
 }
+
+
