@@ -1,23 +1,29 @@
 import java.util.*;
 
-public class Driver {
-    public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        Random r = new Random();
-        /*
-        m = number of rows in the first matrix
-        n = number of columns in the first matrix and number of rows in the second matrix
-        x = number of columns in the second matrix
-         */
-        int m, n, x;
+public class Driver implements Runnable{
+    private final int m;
+    private final int n;
+    private final int x;
+    //public static void main(String[] args) {
+
+    public Driver(int m, int n, int x){
+        this.m = m;
+        this.n = n;
+        this.x = x;
+    }
+
+    private Scanner in = new Scanner(System.in);
+    private Random r = new Random();
+    /*
+    m = number of rows in the first matrix
+    n = number of columns in the first matrix and number of rows in the second matrix
+    x = number of columns in the second matrix
+    */
+
+
+    @Override
+    public void run() {
         // Prompt user for size of matrix
-        System.out.print("Enter the number of rows for first matrix: ");
-        m = in.nextInt();
-        System.out.print("Enter the number of columns for first matrix (will be number of rows for " +
-                "second matrix): ");
-        n = in.nextInt();
-        System.out.print("Enter the number of columns for second matrix: ");
-        x = in.nextInt();
         int[][] a = new int[m][n];  // First matrix
         int[][] b = new int[n][x];  // Second matrix
         int[][] c = new int[m][x];  // Answer matrix
@@ -72,4 +78,6 @@ public class Driver {
         }
         System.out.println("]");
     }
+
+    //}
 } //end Driver class
