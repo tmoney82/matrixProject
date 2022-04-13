@@ -11,6 +11,7 @@ public class Consumer implements Runnable{
     private long consumerSleepStart, consumerSleepEnd, consumerSleepTimeTotal;
     static long consumerSleepTimeSum;
     Random r = new Random();
+    ProducerConsumer result;
 
 
     public Consumer(BoundedBuffer buff, int maxConsumerSleepTime){
@@ -26,7 +27,10 @@ public class Consumer implements Runnable{
         consumerID = Thread.currentThread().getId();
         while (true) {
             workItem = buff.get();
-            workItem.subC = new int[workItem.subA.length][workItem.subB.length];
+            if(workItem.killConsumer()){
+                break;
+            }
+            workItem.subC = new int[workItem.subA.length][workItem.subB[0].length];
             for(int i = 0; i< workItem.subA.length; i++){
                 for(int j = 0; j< workItem.subB[0].length; j++){
                     for(int k = 0; k< workItem.subA[0].length; k++){
@@ -45,6 +49,19 @@ public class Consumer implements Runnable{
                 System.out.print("\n");
             }
             System.out.println("]");
+
+            consumerSleepTime = r.nextInt(maxConsumerSleepTime + 1);
+
+            consumerSleepStart = System.nanoTime();
+            try {
+                Thread.sleep(consumerSleepTime);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            consumerSleepEnd = System.nanoTime();
+            consumerSleepTimeTotal = consumerSleepStart - consumerSleepEnd;
+            consumerSleepTimeSum += consumerSleepTimeTotal;
         }
     }
 }

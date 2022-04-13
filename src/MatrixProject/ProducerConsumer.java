@@ -7,8 +7,7 @@ package MatrixProject;
 
 import static MatrixProject.RunMain.generateMatrix;
 import static MatrixProject.RunMain.multiplyMatrix;
-import static MatrixProject.RunMain.printMatrix;
-import static com.sun.org.glassfish.external.amx.AMXUtil.prop;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -19,6 +18,7 @@ import java.util.Properties;
  * @author dapen
  */
 public class ProducerConsumer {
+
     public static void main(String[] args) throws IOException {
 
         Properties prop = new Properties();
@@ -59,17 +59,18 @@ public class ProducerConsumer {
 
         int[][] matrix_A = generateMatrix(m, n); //matrix a
         int[][] matrix_B = generateMatrix(n, p); //matrix b
-        int[][] matrix_result = multiplyMatrix(matrix_A, matrix_B, m, n, p); //matrix multiplication result
+        int[][] matrix_result = new int[m][p]; //matrix multiplication result
 
-/*
-            printMatrix(matrix_A);
-            System.out.println();
-            printMatrix(matrix_B);
-            printMatrix(matrix_result);
+        System.out.print("First Matrix:");
+        printMatrix(matrix_A);
+        System.out.println();
+        System.out.print("Second Matrix:");
+        printMatrix(matrix_B);
+        System.out.println();
+        //printMatrix(matrix_result);
 
-            // Not sure what this matrixTraversal is for it looks like it does the same thing as printMatrix
-            //matrixTraversal(matrix_A);
-*/
+
+
 
         //Create an instance of the Bounded Buffer
         BoundedBuffer buff = new BoundedBuffer(maxBuffSize);
@@ -79,5 +80,20 @@ public class ProducerConsumer {
         Thread t2 = new Thread(new Consumer(buff, maxConsumerSleepTime));
         t1.start();
         t2.start();
+
+
+    }
+
+    public static void printMatrix(int[][] matrix){
+        System.out.println("\n[");
+        for(int i=0;i<matrix.length;i++)
+        {
+            for(int j=0;j<matrix[0].length;j++)
+            {
+                System.out.print(matrix[i][j]+"\t");
+            }
+
+            System.out.print("\n");
+        }
     }
 }

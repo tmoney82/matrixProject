@@ -19,6 +19,13 @@ public class WorkItem {
     public WorkItem() {
         
     }
+
+    public boolean killConsumer(){
+        if (subA == null || subB == null){
+            return true;
+        }
+        return false;
+    }
     
     
 }
