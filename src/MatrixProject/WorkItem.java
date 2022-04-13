@@ -19,5 +19,5 @@ public class WorkItem {
     int[][] subB;
     int[][] subC;
     int lowA, lowB, highA, highB;
-    boolean done;
+    boolean bDone;
 }

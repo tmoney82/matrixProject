@@ -19,17 +19,34 @@ public class Producer implements Runnable{
 
 
 
-    public Producer(int[][] matrixA, int[][] matrixB, BoundedBuffer buff, int maxSleepTime) {
+    public Producer(int[][] matrixA, int[][] matrixB, BoundedBuffer buff, int maxSleepTime, int splitSize) {
         this.matrixA = matrixA;
         this.matrixB = matrixB;
         this.buff = buff;
         this.maxSleepTime = maxSleepTime;
+        this.splitSize = splitSize;
     }
 
     @Override
     public void run() {
         WorkItem workItem = new WorkItem();
-        workItem.done = false;
+        workItem.subA = matrixA;
+        workItem.subB = matrixB;
+        buff.put(workItem);
+
+        for(int i=0;i<matrixA.length;i++)
+        {
+            for(int j=0;j< matrixA[0].length;j++)
+            {
+                System.out.print(matrixA[i][j]+"\t");
+            }
+
+            System.out.print("\n");
+        }
+
+        /*
+        WorkItem workItem = new WorkItem();
+        workItem.bDone = false;
         for(int i = 0; i < matrixA.length; i = i + splitSize){
             workItem.lowA = i;
             if (i + splitSize - 1 <= matrixA.length){   //enough rows for splitSize
@@ -68,7 +85,7 @@ public class Producer implements Runnable{
                 }
 
             }
-        }
+        }*/
         /*
 	for(int i = 0; i < 10; i++) {
             int num = (int)(Math.random()*(10-100)+100);

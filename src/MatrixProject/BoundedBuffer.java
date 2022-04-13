@@ -18,7 +18,7 @@ public class BoundedBuffer {
 
     public BoundedBuffer(int SIZE) {
         count = 0; in = 0; out = 0;
-        MAX_BUFFER_SIZE = SIZE;
+        this.MAX_BUFFER_SIZE = SIZE;
         buffer = new WorkItem[this.MAX_BUFFER_SIZE];
     }
 
@@ -36,7 +36,7 @@ public class BoundedBuffer {
         return item;
     }
 
-    public synchronized void set(WorkItem value) {
+    public synchronized void put(WorkItem value) {
         while (count == MAX_BUFFER_SIZE) {
             try {
                 wait();

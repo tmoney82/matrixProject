@@ -115,16 +115,5 @@ public class RunMain {
         }
 
     }
-    public static int [][] matrixTraversal(int [][] m1){
-
-        for( int i = 0; i < m1.length; i++){
-            for(int j = 0; j < m1[i].length; j++){
-                System.out.print(m1[i][j] + " ");
-            }
-            System.out.println();
-        }
-        return m1;
-
-    }
 
 }
