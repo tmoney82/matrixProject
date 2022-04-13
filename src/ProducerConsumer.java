@@ -5,14 +5,12 @@
  */
 package MatrixProject;
 
-import static MatrixProject.RunMain.generateMatrix;
-import static MatrixProject.RunMain.multiplyMatrix;
-import static MatrixProject.RunMain.printMatrix;
 import static com.sun.org.glassfish.external.amx.AMXUtil.prop;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.Random;
 
 /**
  *
@@ -59,25 +57,79 @@ public class ProducerConsumer {
 
             int[][] matrix_A = generateMatrix(m, n); //matrix a
             int[][] matrix_B = generateMatrix(n, p); //matrix b
-            int[][] matrix_result = multiplyMatrix(matrix_A, matrix_B, m, n, p); //matrix multiplication result
+            
 
-/*
-            printMatrix(matrix_A);
-            System.out.println();
-            printMatrix(matrix_B);
-            printMatrix(matrix_result);
+
+           // printMatrix(matrix_A);
+            //System.out.println();
+            //printMatrix(matrix_B);
+
 
             // Not sure what this matrixTraversal is for it looks like it does the same thing as printMatrix
             //matrixTraversal(matrix_A);
-*/
+
         
 		//Create an instance of the Bounded Buffer
 	BoundedBuffer buff = new BoundedBuffer(maxBuffSize);
 	//Create an instance of the Producer class with the passed instance of Bounded Buffer
 	Thread t1 = new Thread(new Producer(matrix_A, matrix_B, splitSize, buff, maxProduceSleepTime));
         //Create an instance of the Consumer class with the passed instance of Bounded Buffer
-	//Thread t2 = new Thread(new Consumer(buff));
+	Thread t2 = new Thread(new Consumer(buff, maxConsumerSleepTime, m, p));
 	t1.start();
-	//t2.start();
+	t2.start();
 	}
+    
+    //generate the matrix
+    public static int[][] generateMatrix(int num_row, int num_column) {
+        int[][] matrix = new int[num_row][num_column];
+
+        Random r = new Random();
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                matrix[i][j] = r.nextInt(10);
+            }
+
+        }
+        return matrix;
+    }
+
+    //multiply the matrix
+    public static int[][] multiplyMatrix(int[][] matrix_one, int[][] matrix_two) {
+        int [][] result = new int [matrix_one.length][matrix_two[0].length];
+
+        for(int i = 0; i< matrix_one.length; i++){
+            for(int j = 0; j< matrix_two[0].length; j++){
+                for(int k = 0; k< matrix_two.length; k++){
+                    result[i][j] += matrix_one[i][k] * matrix_two[k][j];
+                }
+            }
+        }
+        return result;
+    }
+
+    public static void printMatrix(int[][] matrix) {
+        System.out.println();
+        for (int i = 0; i < matrix.length; i++) {
+
+            for (int j = 0; j < matrix[i].length; j++) {
+                System.out.print(matrix[i][j] + " ");
+
+            }
+            System.out.println();
+        }
+
+    }
+    public static int [][] matrixTraversal(int [][] m1){
+
+        for( int i = 0; i < m1.length; i++){
+            for(int j = 0; j < m1[i].length; j++){
+                System.out.print(m1[i][j] + " ");
+            }
+            System.out.println();
+        }
+        return m1;
+
+    }
+    
+    
 }

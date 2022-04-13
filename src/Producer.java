@@ -29,27 +29,30 @@ public class Producer implements Runnable{
 	
     @Override
     public void run() {
-        WorkItem workItem = new WorkItem();
-        workItem.subA = new int[splitSize][matrixA[0].length]; 
-        workItem.subB = new int[matrixB.length][splitSize];
-        workItem.subA[0][0] = 3;
-        workItem.done = false;
+        int[][] subA;
+        int[][] subB = new int[1][1];
+        int lowA, lowB, highA, highB;
+        //workItem.subA = new int[splitSize][matrixA[0].length]; 
+        //workItem.subB = new int[matrixB.length][splitSize];
+        
         for(int i = 0; i < matrixA.length; i = i + splitSize){
-            workItem.lowA = i;
+            lowA = i;
             if (i + splitSize - 1 <= matrixA.length){   //enough rows for splitSize
-                workItem.highA = i + splitSize - 1;
+                highA = i + splitSize - 1;
+                subA = new int[splitSize][matrixA[0].length];
                 for(int ar = 0; ar < splitSize; ar++ ){
                     for(int ac = 0; ac < matrixA[0].length; ac++){
-                        workItem.subA[ar][ac] = matrixA[workItem.lowA + ar][ac];
+                        subA[ar][ac] = matrixA[lowA + ar][ac];
                     }
                     //workItem.subA[ar] = matrixA[workItem.lowA + ar];
                 }
             }
             else {      //no enough rows for splitSize
-                workItem.highA = matrixA.length - 1;
+                highA = matrixA.length - 1;
+                subA = new int[matrixA.length %splitSize][matrixA[0].length];
                 for(int ar = 0; ar < (matrixA.length % splitSize); ar++ ){
                     for(int ac = 0; ac < matrixA[0].length; ac++){
-                        workItem.subA[ar][ac] = matrixA[workItem.lowA + ar][ac];
+                        subA[ar][ac] = matrixA[lowA + ar][ac];
                     }
                     //workItem.subA[ar] = matrixA[workItem.lowA + ar];
                 }
@@ -57,30 +60,33 @@ public class Producer implements Runnable{
                     
             
             for(int j = 0; j < matrixB[0].length; j = j + splitSize){
-                workItem.lowB = j;
+                lowB = j;
                 if (j + splitSize - 1 <= matrixB[0].length){    //enough columns for splitSize
-                    workItem.highB = j + splitSize - 1;
+                    highB = j + splitSize - 1;
+                    subB = new int[matrixB.length][splitSize];
                     for(int br = 0; br < matrixB.length; br++ ){    //sbuB <= matrixB
                         for (int bc = 0; bc < splitSize; bc++){
-                            workItem.subB[br][bc] = matrixB[br][workItem.lowB + bc];
+                            subB[br][bc] = matrixB[br][lowB + bc];
                         }                        
                     }
                 }
                 else {      //no enough columns for splitSize
-                    workItem.highB = matrixB[0].length - 1;
+                    highB = matrixB[0].length - 1;
+                    subB = new int[matrixB.length][matrixB[0].length % splitSize];
                     for(int br = 0; br < matrixB.length; br++ ){    //sbuB <= matrixB
                         for (int bc = 0; bc < (matrixB[0].length % splitSize); bc++){
-                            workItem.subB[br][bc] = matrixB[br][workItem.lowB + bc]; 
+                            subB[br][bc] = matrixB[br][lowB + bc]; 
                         }                        
                     }
                 }
+                WorkItem workItem = new WorkItem(subA, subB, lowA, lowB, highA, highB, false);
                 buff.set(workItem);
-                System.out.println("Put A[" + workItem.lowA + "][" + workItem.highA + "] B[" + workItem.lowB + "][" + workItem.highB + "] pair into buffer");
+                //System.out.println("Put A[" + workItem.lowA + "][" + workItem.highA + "] B[" + workItem.lowB + "][" + workItem.highB + "] pair into buffer");
             }
         }
 
-        try {
-            Thread.sleep((int)(Math.random() * (1 + 1 - maxSleepTime) + maxSleepTime));
-        } catch(InterruptedException e){}
+        //try {
+            //Thread.sleep((int)(Math.random() * (1 + 1 - maxSleepTime) + maxSleepTime));
+        //} catch(InterruptedException e){}
     }
 }

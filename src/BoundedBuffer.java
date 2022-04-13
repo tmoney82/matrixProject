@@ -19,10 +19,11 @@ public class BoundedBuffer {
     public BoundedBuffer(int SIZE) {
         count = 0; in = 0; out = 0;
         MAX_BUFFER_SIZE = SIZE;
-        buffer = new WorkItem[this.MAX_BUFFER_SIZE];
+        buffer = new WorkItem[SIZE];
     }
 
     public synchronized WorkItem get() {
+        //showbuff();
         WorkItem item;
         while (count == 0) {
             try {
@@ -45,6 +46,15 @@ public class BoundedBuffer {
         buffer[in] = value;
         in = (in+1) % MAX_BUFFER_SIZE;
         count++;
+        //showbuff();
         notifyAll();  
+    }
+    
+    private void showbuff(){
+        for (int i = 0; i < MAX_BUFFER_SIZE; i++){
+            if(buffer[i] != null){
+                System.out.println("Buff [" + i + "] --> lowA: " + buffer[i].lowA + ", lowB: " + buffer[i].lowB);
+            }
+        }
     }
 }

@@ -17,10 +17,30 @@ public class WorkItem {
     boolean done;
 
     public WorkItem() {
-        
+    }
+
+    public WorkItem(int[][] subA, int[][] subB, int lowA, int lowB, int highA, int highB, boolean done) {
+        this.subA = subA;
+        this.subB = subB;
+        this.lowA = lowA;
+        this.lowB = lowB;
+        this.highA = highA;
+        this.highB = highB;
+        this.done = done;
     }
     
     
+    
+    public WorkItem(int[][] subA, int[][] subB, int[][] subC, int lowA, int lowB, int highA, int highB, boolean done) {
+        this.subA = subA;
+        this.subB = subB;
+        this.subC = subC;
+        this.lowA = lowA;
+        this.lowB = lowB;
+        this.highA = highA;
+        this.highB = highB;
+        this.done = done;
+    }
 }
 
 
