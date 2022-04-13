@@ -19,9 +19,6 @@ public class Consumer implements Runnable{
         this.maxConsumerSleepTime = maxConsumerSleepTime;
     }
 
-    public long getConsumerID(){
-        return consumerID;
-    }
     @Override
     public void run() {
         consumerID = Thread.currentThread().getId();
@@ -30,6 +27,7 @@ public class Consumer implements Runnable{
             if(workItem.killConsumer()){
                 break;
             }
+            consumedItems++;
             workItem.subC = new int[workItem.subA.length][workItem.subB[0].length];
             for(int i = 0; i< workItem.subA.length; i++){
                 for(int j = 0; j< workItem.subB[0].length; j++){
@@ -49,7 +47,7 @@ public class Consumer implements Runnable{
                 System.out.print("\n");
             }
             System.out.println("]");
-
+            System.out.println("Consumer thread: " + Thread.currentThread().getId() + " is waiting");
             consumerSleepTime = r.nextInt(maxConsumerSleepTime + 1);
 
             consumerSleepStart = System.nanoTime();

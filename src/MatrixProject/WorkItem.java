@@ -10,14 +10,23 @@ package MatrixProject;
  * @author dapeng
  */
 public class WorkItem {
-    int[][] subA;
-    int[][] subB;
-    int[][] subC;
-    int lowA, lowB, highA, highB;
-    boolean done;
+    int[][] subA = null;
+    int[][] subB = null;
+    int[][] subC = null;
+    int lowA = 0;
+    int lowB = 0;
+    int highA = 0;
+    int highB = 0;
+    boolean done = false;
 
-    public WorkItem() {
-        
+    public WorkItem(int[][] subA, int[][] subB, int[][] subC, int lowA, int highA, int lowB, int highB) {
+        this.subA = subA;
+        this.subB = subB;
+        this.subC = subC;
+        this.lowA = lowA;
+        this.highA = highA;
+        this.lowB = lowB;
+        this.highB = highB;
     }
 
     public boolean killConsumer(){

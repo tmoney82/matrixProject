@@ -29,7 +29,7 @@ public class Producer implements Runnable{
 	
     @Override
     public void run() {
-        WorkItem workItem = new WorkItem();
+        WorkItem workItem = new WorkItem(null, null, null, 0 , 0, 0,  0);
         workItem.subA = new int[splitSize][matrixA[0].length]; 
         workItem.subB = new int[matrixB.length][splitSize];
         workItem.subA[0][0] = 3;
