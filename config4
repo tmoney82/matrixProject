@@ -1,0 +1,8 @@
+M = 25
+N = 22
+P = 16
+MaxBuffSize = 5
+SplitSize = 4
+NumConsumer = 2
+MaxProduceSleepTime = 20
+MaxConsumerSleepTime = 80
