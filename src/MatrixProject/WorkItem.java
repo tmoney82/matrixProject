@@ -10,14 +10,13 @@ package MatrixProject;
  * @author dapeng
  */
 public class WorkItem {
-    int[][] subA;
-    int[][] subB;
-    int[][] subC;
-    int lowA, lowB, highA, highB;
-    boolean done;
+    int[][] subA = null;
+    int[][] subB = null;
+    int[][] subC = null;
+    int lowA, lowB, highA, highB = 0;
+    boolean done = false;
 
-    public WorkItem() {
-    }
+    public WorkItem() {}
 
     public WorkItem(int[][] subA, int[][] subB, int lowA, int lowB, int highA, int highB, boolean done) {
         this.subA = subA;
@@ -28,19 +27,7 @@ public class WorkItem {
         this.highB = highB;
         this.done = done;
     }
-    
-    
-    
-    public WorkItem(int[][] subA, int[][] subB, int[][] subC, int lowA, int lowB, int highA, int highB, boolean done) {
-        this.subA = subA;
-        this.subB = subB;
-        this.subC = subC;
-        this.lowA = lowA;
-        this.lowB = lowB;
-        this.highA = highA;
-        this.highB = highB;
-        this.done = done;
-    }
+
 }
 
 

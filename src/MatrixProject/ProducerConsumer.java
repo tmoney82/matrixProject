@@ -16,14 +16,20 @@ import java.util.Random;
  *
  * @author dapen
  */
+import java.util.Scanner;
 public class ProducerConsumer {
     public static void main(String[] args) throws IOException {
             
         Properties prop = new Properties();
+        Scanner in = new Scanner(System.in);
+
+        // Get the name of config file from user
+        System.out.print("Enter the name of the configuration file you want to use: ");
+        String configFile = in.nextLine();
             
         try {
 
-            FileInputStream input_file = new FileInputStream("C:\\Users\\dapen\\Documents\\CS405\\Project\\Project2\\CS405Project2\\src\\main\\java\\hdp\\edu\\wsu\\cs405project2\\config.config"); //input the file
+            FileInputStream input_file = new FileInputStream(configFile); //input the file
             prop.load(input_file);
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
@@ -77,18 +83,17 @@ public class ProducerConsumer {
 	Thread t2 = new Thread(new Consumer(buff, maxConsumerSleepTime, m, p));
 	t1.start();
 	t2.start();
-	}
+
+    }
     
     //generate the matrix
     public static int[][] generateMatrix(int num_row, int num_column) {
         int[][] matrix = new int[num_row][num_column];
-
         Random r = new Random();
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
                 matrix[i][j] = r.nextInt(10);
             }
-
         }
         return matrix;
     }
@@ -110,15 +115,13 @@ public class ProducerConsumer {
     public static void printMatrix(int[][] matrix) {
         System.out.println();
         for (int i = 0; i < matrix.length; i++) {
-
             for (int j = 0; j < matrix[i].length; j++) {
                 System.out.print(matrix[i][j] + " ");
-
             }
             System.out.println();
         }
-
     }
+    /*
     public static int [][] matrixTraversal(int [][] m1){
 
         for( int i = 0; i < m1.length; i++){
@@ -129,7 +132,7 @@ public class ProducerConsumer {
         }
         return m1;
 
-    }
+    }*/
     
     
 }

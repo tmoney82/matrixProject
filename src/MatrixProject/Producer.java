@@ -11,11 +11,11 @@ package MatrixProject;
  */
 public class Producer implements Runnable{
     
-    private BoundedBuffer buff;
-    private int maxSleepTime;
-    private int[][] matrixA;
-    private int[][] matrixB;
-    private int splitSize;
+    private final BoundedBuffer buff;
+    private final int maxSleepTime;
+    private final int[][] matrixA;
+    private final int[][] matrixB;
+    private final int splitSize;
     
     
 	
@@ -30,10 +30,8 @@ public class Producer implements Runnable{
     @Override
     public void run() {
         int[][] subA;
-        int[][] subB = new int[1][1];
+        int[][] subB;
         int lowA, lowB, highA, highB;
-        //workItem.subA = new int[splitSize][matrixA[0].length]; 
-        //workItem.subB = new int[matrixB.length][splitSize];
         
         for(int i = 0; i < matrixA.length; i = i + splitSize){
             lowA = i;
@@ -41,19 +39,15 @@ public class Producer implements Runnable{
                 highA = i + splitSize - 1;
                 subA = new int[splitSize][matrixA[0].length];
                 for(int ar = 0; ar < splitSize; ar++ ){
-                    for(int ac = 0; ac < matrixA[0].length; ac++){
-                        subA[ar][ac] = matrixA[lowA + ar][ac];
-                    }
+                    System.arraycopy(matrixA[lowA + ar], 0, subA[ar], 0, matrixA[0].length);
                     //workItem.subA[ar] = matrixA[workItem.lowA + ar];
                 }
             }
-            else {      //no enough rows for splitSize
+            else {      //not enough rows for splitSize
                 highA = matrixA.length - 1;
                 subA = new int[matrixA.length %splitSize][matrixA[0].length];
                 for(int ar = 0; ar < (matrixA.length % splitSize); ar++ ){
-                    for(int ac = 0; ac < matrixA[0].length; ac++){
-                        subA[ar][ac] = matrixA[lowA + ar][ac];
-                    }
+                    System.arraycopy(matrixA[lowA + ar], 0, subA[ar], 0, matrixA[0].length);
                     //workItem.subA[ar] = matrixA[workItem.lowA + ar];
                 }
             }
@@ -65,28 +59,26 @@ public class Producer implements Runnable{
                     highB = j + splitSize - 1;
                     subB = new int[matrixB.length][splitSize];
                     for(int br = 0; br < matrixB.length; br++ ){    //sbuB <= matrixB
-                        for (int bc = 0; bc < splitSize; bc++){
-                            subB[br][bc] = matrixB[br][lowB + bc];
-                        }                        
+                        System.arraycopy(matrixB[br], lowB, subB[br], 0, splitSize);
                     }
                 }
-                else {      //no enough columns for splitSize
+                else {      //not enough columns for splitSize
                     highB = matrixB[0].length - 1;
                     subB = new int[matrixB.length][matrixB[0].length % splitSize];
                     for(int br = 0; br < matrixB.length; br++ ){    //sbuB <= matrixB
-                        for (int bc = 0; bc < (matrixB[0].length % splitSize); bc++){
-                            subB[br][bc] = matrixB[br][lowB + bc]; 
-                        }                        
+                        System.arraycopy(matrixB[br], lowB, subB[br], 0, matrixB[0].length % splitSize);
                     }
                 }
+
                 WorkItem workItem = new WorkItem(subA, subB, lowA, lowB, highA, highB, false);
                 buff.set(workItem);
-                //System.out.println("Put A[" + workItem.lowA + "][" + workItem.highA + "] B[" + workItem.lowB + "][" + workItem.highB + "] pair into buffer");
+
+                System.out.println("\nProducer " + Thread.currentThread().getId() + " puts A[" + workItem.lowA + "][" + workItem.highA + "] B[" + workItem.lowB + "][" + workItem.highB + "] pair into buffer");
             }
         }
 
-        //try {
-            //Thread.sleep((int)(Math.random() * (1 + 1 - maxSleepTime) + maxSleepTime));
-        //} catch(InterruptedException e){}
+        try {
+            Thread.sleep((int)(Math.random() * (1 + 1 - maxSleepTime) + maxSleepTime));
+        } catch(InterruptedException ignored){}
     }
 }

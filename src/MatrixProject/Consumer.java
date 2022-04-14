@@ -11,14 +11,18 @@ package MatrixProject;
  */
 public class Consumer implements Runnable {
     
-    private BoundedBuffer buff;
-    private int maxConsumerSleepTime;
-    private int[][] matrixC;
+    private final BoundedBuffer buff;
+    private final int maxConsumerSleepTime;
+    private final int[][] matrixC;
+    private final int num_rows;
+    private final int num_columns;
 	
     public Consumer(BoundedBuffer buff, int maxConsumerSleepTime, int num_rows, int num_columns) {
 	this.buff = buff;
         this.maxConsumerSleepTime = maxConsumerSleepTime;
         this.matrixC = new int[num_rows][num_columns];
+        this.num_rows = num_rows;
+        this.num_columns = num_columns;
     }
     
     private static int[][] multiplyMatrix(int[][] matrix_one, int[][] matrix_two) {
@@ -36,41 +40,38 @@ public class Consumer implements Runnable {
     
     private static void printMatrix(int[][] matrix) {
         System.out.println();
-        for (int i = 0; i < matrix.length; i++) {
+        for (int[] ints : matrix) {
 
-            for (int j = 0; j < matrix[i].length; j++) {
-                System.out.print(matrix[i][j] + " ");
-
+            for (int anInt : ints) {
+                System.out.print(anInt + " ");
             }
             System.out.println();
         }
-
     }
 	
     @Override
     public void run() {
 	WorkItem workItem;
-        do {
+        while (true) {
             workItem = buff.get();
-            //System.out.println("GET A[" + workItem.lowA + "][" + workItem.highA + "] B[" + workItem.lowB + "][" + workItem.highB + "] pair from buffer");
+            System.out.println("\nConsumer " + Thread.currentThread().getId() + " gets A[" + workItem.lowA + "][" + workItem.highA + "] B[" + workItem.lowB + "][" + workItem.highB + "] pair from buffer");
             workItem.subC = multiplyMatrix(workItem.subA, workItem.subB);
             //System.out.println("lowA is: " + workItem.lowA  + " and lowB is: " + workItem.lowB);
             
             for(int i = 0; i < workItem.subC.length; i++){
-                for(int j = 0; j < workItem.subC[0].length; j++){
-                    //System.out.println("Row is: " + workItemGeted.lowA +"+"+ i + " and Column is: " + workItemGeted.lowB + "+"+j);
-                    matrixC[workItem.lowA + i][workItem.lowB + j] = workItem.subC[i][j];
-                    
-                }
+                //System.out.println("Row is: " + workItemGeted.lowA +"+"+ i + " and Column is: " + workItemGeted.lowB + "+"+j);
+                System.arraycopy(workItem.subC[i], 0, matrixC[workItem.lowA + i], workItem.lowB, workItem.subC[0].length);
             }
-            workItem.done = true;
-        
+            if (workItem.highA == num_rows -1 && workItem.highB == num_columns -1){
+                break;
+            }
+
             try {
                 Thread.sleep((int)(Math.random()*maxConsumerSleepTime));
-            } catch(InterruptedException e){}
-            
-            printMatrix(matrixC);
-        } while(workItem != null);
-        
+            } catch(InterruptedException ignored){}
+
+            //printMatrix(matrixC);
+        }
+        printMatrix(matrixC);
     }
 }

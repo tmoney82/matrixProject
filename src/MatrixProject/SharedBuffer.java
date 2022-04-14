@@ -1,3 +1,5 @@
+package MatrixProject;
+
 public class SharedBuffer {
     private int count, in, out;	//the number of items, indexes of in and out pointers
     private static final int MAX_BUFFER_SIZE = 5; //the max number of items in buffer
