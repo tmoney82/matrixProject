@@ -32,7 +32,7 @@ public class Producer implements Runnable{
         int[][] subA;
         int[][] subB;
         int lowA, lowB, highA, highB;
-        
+
         for(int i = 0; i < matrixA.length; i = i + splitSize){
             lowA = i;
             if (i + splitSize - 1 <= matrixA.length){   //enough rows for splitSize
@@ -51,8 +51,8 @@ public class Producer implements Runnable{
                     //workItem.subA[ar] = matrixA[workItem.lowA + ar];
                 }
             }
-                    
-            
+
+
             for(int j = 0; j < matrixB[0].length; j = j + splitSize){
                 lowB = j;
                 if (j + splitSize - 1 <= matrixB[0].length){    //enough columns for splitSize

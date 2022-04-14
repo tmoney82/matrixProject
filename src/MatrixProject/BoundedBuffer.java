@@ -22,6 +22,16 @@ public class BoundedBuffer {
         buffer = new WorkItem[SIZE];
     }
 
+    public int getSize(){
+        int numItems = 0;
+        for (int i = 0; i < buffer.length; i++){
+            if (buffer[i] != null){
+                numItems++;
+            }
+        }
+        return numItems;
+    }
+
     public synchronized WorkItem get() {
         //showbuff();
         WorkItem item;
@@ -50,10 +60,12 @@ public class BoundedBuffer {
         notifyAll();  
     }
     
-    private void showbuff(){
+    public void showbuff(){
         for (int i = 0; i < MAX_BUFFER_SIZE; i++){
             if(buffer[i] != null){
                 System.out.println("Buff [" + i + "] --> lowA: " + buffer[i].lowA + ", lowB: " + buffer[i].lowB);
+            }else {
+                System.out.println("Buffer is empty");
             }
         }
     }

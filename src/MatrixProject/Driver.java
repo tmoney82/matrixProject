@@ -80,8 +80,22 @@ public class Driver {
 	    Thread t1 = new Thread(new Producer(matrix_A, matrix_B, splitSize, buff, maxProduceSleepTime));
         //Create an instance of the Consumer class with the passed instance of Bounded Buffer
 	    Thread t2 = new Thread(new Consumer(buff, maxConsumerSleepTime, m, p, matrix_A, matrix_B, matrix_C));
-	    t1.start();
-	    t2.start();
+	    t1.start(); // Starts the producer thread
+        t2.start(); // Starts the consumer thread
+
+        // These will work to create multiple consumer and producer threads. Will need to do some sort of checking that the buffer isn't full
+        // in the producer class. And the consumers will consume at different times so the final buffer only gets partially full.
+        /*
+        for (int t = 0; t < 2; t++){
+            Thread producer = new Thread(new Producer(matrix_A, matrix_B, splitSize, buff, maxProduceSleepTime));
+            producer.start();
+        }
+
+        // Attempt at creating multiple consumer threads
+        for (int i = 0; i < numConsumer; i++){
+            Thread consumer = new Thread(new Consumer(buff, maxConsumerSleepTime, m, p, matrix_A, matrix_B, matrix_C));
+            consumer.start();
+        }*/
     }
     
     // Generate the matrix

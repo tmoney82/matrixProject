@@ -3,6 +3,6 @@ N = 12
 P = 15
 MaxBuffSize = 5
 SplitSize = 3
-NumConsumer = 2
+NumConsumer = 3
 MaxProduceSleepTime = 20
 MaxConsumerSleepTime = 80
