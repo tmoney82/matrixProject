@@ -10,19 +10,26 @@ package MatrixProject;
  * @author dapen
  */
 public class Consumer implements Runnable {
-    
+
     private final BoundedBuffer buff;
     private final int maxConsumerSleepTime;
     private final int[][] matrixC;
     private final int num_rows;
     private final int num_columns;
+    private final int[][] matrixA;
+    private final int[][] matrixB;
+    private int[][] originalResult;
 	
-    public Consumer(BoundedBuffer buff, int maxConsumerSleepTime, int num_rows, int num_columns) {
+    public Consumer(BoundedBuffer buff, int maxConsumerSleepTime, int num_rows, int num_columns, int[][] matrixA,
+                    int[][] matrixB, int[][] originalResult) {
 	this.buff = buff;
         this.maxConsumerSleepTime = maxConsumerSleepTime;
+        this.matrixA = matrixA;
+        this.matrixB = matrixB;
         this.matrixC = new int[num_rows][num_columns];
         this.num_rows = num_rows;
         this.num_columns = num_columns;
+        this.originalResult = originalResult;
     }
     
     private static int[][] multiplyMatrix(int[][] matrix_one, int[][] matrix_two) {
@@ -40,12 +47,21 @@ public class Consumer implements Runnable {
     
     private static void printMatrix(int[][] matrix) {
         System.out.println();
-        for (int[] ints : matrix) {
-
-            for (int anInt : ints) {
-                System.out.print(anInt + " ");
+        for (int i = 0; i < matrix.length; i++) {
+            if (i == 0) {
+                System.out.print("[ [");
+            } else {
+                System.out.print("[");
             }
-            System.out.println();
+            for (int j = 0; j < matrix[i].length; j++) {
+                System.out.print(matrix[i][j] + " ");
+            }
+            if (i == matrix.length - 1) {
+                System.out.print("] ]");
+            } else {
+                System.out.print("],");
+                System.out.println();
+            }
         }
     }
 	
@@ -72,6 +88,13 @@ public class Consumer implements Runnable {
 
             //printMatrix(matrixC);
         }
+        System.out.println("\nProducer successfully assembly all the results from consumer threads");
+        System.out.println("------------------------------------------------");
+        System.out.print("Final result of parallel matrix multiplication:");
         printMatrix(matrixC);
+        System.out.print("\n\nVerified result of sequential matrix multiplication:");
+        originalResult = multiplyMatrix(matrixA, matrixB);
+        printMatrix(originalResult);
+        System.out.println("\n------------------------------------------------");
     }
 }
