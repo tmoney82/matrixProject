@@ -13,28 +13,46 @@ public class BoundedBuffer {
     private int count, in, out;	//the number of items, indexes of in and out pointers
     private final int MAX_BUFFER_SIZE;
     private final WorkItem[] buffer;
+    private int numOfTimesFull, numOfTimesEmpty;
+    private int numItemsProduced, numItemsConsumed;
     
     private final boolean bAvailable = false;    //flag to control the shared int variable
 
     public BoundedBuffer(int SIZE) {
-        count = 0; in = 0; out = 0;
+        count = 0; in = 0; out = 0; numOfTimesEmpty = 0; numOfTimesFull = 0; numItemsConsumed = 0; numItemsProduced = 0;
         MAX_BUFFER_SIZE = SIZE;
         buffer = new WorkItem[SIZE];
     }
 
     public int getSize(){
-        int numItems = 0;
-        for (int i = 0; i < buffer.length; i++){
-            if (buffer[i] != null){
-                numItems++;
-            }
-        }
-        return numItems;
+        return count;
+    }
+
+    public int getNumOfTimesFull(){
+        return numOfTimesFull;
+    }
+
+    public int getNumOfTimesEmpty(){
+        return numOfTimesEmpty;
+    }
+
+    public int getNumItemsProduced(){
+        return numItemsProduced;
+    }
+
+    public int getNumItemsConsumed(){
+        return numItemsConsumed;
     }
 
     public synchronized WorkItem get() {
         //showbuff();
         WorkItem item;
+        if (count == 0){
+            numOfTimesEmpty++;
+        }
+        if (count == 5){
+            numOfTimesFull++;
+        }
         while (count == 0) {
             try {
                 wait();
@@ -43,6 +61,7 @@ public class BoundedBuffer {
         item = buffer[out];
         out = (out+1)% MAX_BUFFER_SIZE;
         count--;
+        numItemsConsumed++;
         notify();
         return item;
     }
@@ -56,6 +75,7 @@ public class BoundedBuffer {
         buffer[in] = value;
         in = (in+1) % MAX_BUFFER_SIZE;
         count++;
+        numItemsProduced++;
         //showbuff();
         notify();
     }

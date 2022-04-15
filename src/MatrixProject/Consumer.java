@@ -76,6 +76,7 @@ public class Consumer implements Runnable {
             }
 
             while (true) {
+                System.out.println("\nBuffer size: " + buff.getSize());
                 workItem = buff.get();
                 System.out.println("\nConsumer " + Thread.currentThread().getId() + " gets A[" + workItem.lowA + "][" + workItem.highA + "] B[" + workItem.lowB + "][" + workItem.highB + "] pair from buffer");
                 workItem.subC = multiplyMatrix(workItem.subA, workItem.subB);
@@ -113,5 +114,9 @@ public class Consumer implements Runnable {
         originalResult = multiplyMatrix(matrixA, matrixB);
         printMatrix(originalResult);
         System.out.println("\n------------------------------------------------");
+        System.out.println("The number of times the buffer was full: " + buff.getNumOfTimesFull());
+        System.out.println("The number of times the buffer was empty: " + buff.getNumOfTimesEmpty());
+        System.out.println("Number of items produced: " + buff.getNumItemsProduced());
+        System.out.println("Number of items consumed: " + buff.getNumItemsConsumed());
     }
 }
