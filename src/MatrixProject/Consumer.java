@@ -67,34 +67,43 @@ public class Consumer implements Runnable {
 	
     @Override
     public void run() {
-	WorkItem workItem;
-        while (true) {
-            workItem = buff.get();
-            System.out.println("\nConsumer " + Thread.currentThread().getId() + " gets A[" + workItem.lowA + "][" + workItem.highA + "] B[" + workItem.lowB + "][" + workItem.highB + "] pair from buffer");
-            workItem.subC = multiplyMatrix(workItem.subA, workItem.subB);
-            //System.out.println("lowA is: " + workItem.lowA  + " and lowB is: " + workItem.lowB);
-
-            // Prints out the subA x subB => subC
-            System.out.println("\nConsumer " + Thread.currentThread().getId() + " finishes calculating");
-            printMatrix(workItem.subA);
-            System.out.print("\nx");
-            printMatrix(workItem.subB);
-            System.out.print("\n=>");
-            printMatrix(workItem.subC);
-
-            for(int i = 0; i < workItem.subC.length; i++){
-                //System.out.println("Row is: " + workItemGeted.lowA +"+"+ i + " and Column is: " + workItemGeted.lowB + "+"+j);
-                System.arraycopy(workItem.subC[i], 0, matrixC[workItem.lowA + i], workItem.lowB, workItem.subC[0].length);
-            }
-            if (workItem.highA == num_rows -1 && workItem.highB == num_columns -1){
-                break;
+	    WorkItem workItem;
+        synchronized (buff) {
+            try{
+                buff.wait();
+            }catch (InterruptedException e){
+                e.printStackTrace();
             }
 
-            try {
-                Thread.sleep((int)(Math.random()*maxConsumerSleepTime));
-            } catch(InterruptedException ignored){}
+            while (true) {
+                workItem = buff.get();
+                System.out.println("\nConsumer " + Thread.currentThread().getId() + " gets A[" + workItem.lowA + "][" + workItem.highA + "] B[" + workItem.lowB + "][" + workItem.highB + "] pair from buffer");
+                workItem.subC = multiplyMatrix(workItem.subA, workItem.subB);
+                //System.out.println("lowA is: " + workItem.lowA  + " and lowB is: " + workItem.lowB);
 
-            //printMatrix(matrixC);
+                // Prints out the subA x subB => subC
+                System.out.println("\nConsumer " + Thread.currentThread().getId() + " finishes calculating");
+                printMatrix(workItem.subA);
+                System.out.print("\nx");
+                printMatrix(workItem.subB);
+                System.out.print("\n=>");
+                printMatrix(workItem.subC);
+
+                for (int i = 0; i < workItem.subC.length; i++) {
+                    //System.out.println("Row is: " + workItemGeted.lowA +"+"+ i + " and Column is: " + workItemGeted.lowB + "+"+j);
+                    System.arraycopy(workItem.subC[i], 0, matrixC[workItem.lowA + i], workItem.lowB, workItem.subC[0].length);
+                }
+                if (workItem.highA == num_rows - 1 && workItem.highB == num_columns - 1) {
+                    break;
+                }
+
+                try {
+                    Thread.sleep((int) (Math.random() * maxConsumerSleepTime));
+                } catch (InterruptedException ignored) {
+                }
+
+                //printMatrix(matrixC);
+            }
         }
         System.out.println("\nProducer successfully assembly all the results from consumer threads");
         System.out.println("------------------------------------------------");

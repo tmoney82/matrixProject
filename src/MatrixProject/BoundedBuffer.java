@@ -43,7 +43,7 @@ public class BoundedBuffer {
         item = buffer[out];
         out = (out+1)% MAX_BUFFER_SIZE;
         count--;
-        notifyAll();
+        notify();
         return item;
     }
 
@@ -57,7 +57,7 @@ public class BoundedBuffer {
         in = (in+1) % MAX_BUFFER_SIZE;
         count++;
         //showbuff();
-        notifyAll();  
+        notify();
     }
     
     public void showbuff(){
