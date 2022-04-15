@@ -17,7 +17,7 @@ import java.util.Scanner;
  */
 
 public class Driver {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
             
         Properties prop = new Properties();
         Scanner in = new Scanner(System.in);
@@ -85,17 +85,7 @@ public class Driver {
 
         // These will work to create multiple consumer and producer threads. Will need to do some sort of checking that the buffer isn't full
         // in the producer class. And the consumers will consume at different times so the final buffer only gets partially full.
-        /*
-        for (int t = 0; t < 2; t++){
-            Thread producer = new Thread(new Producer(matrix_A, matrix_B, splitSize, buff, maxProduceSleepTime));
-            producer.start();
-        }
 
-        // Attempt at creating multiple consumer threads
-        for (int i = 0; i < numConsumer; i++){
-            Thread consumer = new Thread(new Consumer(buff, maxConsumerSleepTime, m, p, matrix_A, matrix_B, matrix_C));
-            consumer.start();
-        }*/
     }
     
     // Generate the matrix
